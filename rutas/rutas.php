@@ -43,8 +43,15 @@ if(count(array_filter($arrayRutas)) == 1){
     */
     if(array_filter($arrayRutas)[2] == "registro"){
 
-      if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "GET"){
-        $clientes = new ControladorClientes;
+      if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
+
+        $datos = array("nombre" => $_POST["nombre"],
+        "apellido" => $_POST["apellido"],
+        "email" => $_POST["email"]);
+
+        //echo "<pre>"; print_r($datos);echo "</pre>";
+
+        $clientes = new ControladorClientes($datos);
         $clientes->crear();
       }
     }
