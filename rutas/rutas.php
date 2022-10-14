@@ -35,12 +35,11 @@ if(count(array_filter($arrayRutas)) == 1){
       cuando se hace una petición a la api sale este mensaje siempre y cuando se ponga como parametro 2 en la url registro (http://localhost/api-rest/registro)
     */
     if(array_filter($arrayRutas)[2] == "registro"){
-      $json=array(
-        "detalle"=>"estas en la vista registro"
-      );
 
-      echo json_encode($json,true);
-      return;
+      if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "GET"){
+        $clientes = new ControladorClientes;
+        $clientes->crear();
+      }
     }
 
  }
