@@ -24,13 +24,20 @@ if(count(array_filter($arrayRutas)) == 1){
     if(array_filter($arrayRutas)[2] == "cursos"){
 
       /* controla que se envie una consulta al servidor de tipo POST */
-      if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
+      if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "GET"){
 
         /* manda a llamar a la clase ControladorCursos que se encuentra en el archivo cursos.controlador.php */
         $cursos = new ControladorCursos;
         $cursos->index();
       }
+
+      else if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST"){
+        $cursos = new ControladorCursos;
+        $cursos->crear();
+      }
     }
+
+
     /*
       cuando se hace una petición a la api sale este mensaje siempre y cuando se ponga como parametro 2 en la url registro (http://localhost/api-rest/registro)
     */
