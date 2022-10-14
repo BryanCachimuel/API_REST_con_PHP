@@ -51,8 +51,8 @@ if(count(array_filter($arrayRutas)) == 1){
 
         //echo "<pre>"; print_r($datos);echo "</pre>";
 
-        $clientes = new ControladorClientes($datos);
-        $clientes->crear();
+        $clientes = new ControladorClientes();
+        $clientes->crear($datos);
       }
     }
 
