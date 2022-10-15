@@ -62,6 +62,26 @@ class ControladorClientes{
 
         $llave_secreta = str_replace("$","M",crypt($datos["email"].$datos["apellido"].$datos["nombre"], '$2a$07$afartwetsdAD52356FEDGsfhsd$'));
         //echo "<pre>"; print_r($llave_secreta);echo "</pre>";
+
+        $datos = array("nombre"=>$datos["nombre"],
+                       "apellido"=>$datos["apellido"],
+                       "email"=>$datos["email"],
+                       "id_cliente"=>$id_cliente,
+                       "llave_secreta"=>$llave_secreta,
+                       "create_at"=>date('Y-m-d h:i:s'),
+                       "update_at"=>date('Y-m-d h:i:s')
+        );
+
+        $crear = ModeloClientes::crear("clientes", $datos);
+
+        if($crear == "ok"){
+            $json=array(
+                "status"=>200,
+                "detalle"=> "Registro del cliente exitoso"
+            );
+            echo json_encode($json,true);
+            return;
+        }
     }
 }
 
