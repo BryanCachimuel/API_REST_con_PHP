@@ -4,14 +4,26 @@ class ControladorCursos{
 
     public function index(){
 
-        $cursos = ModeloCursos::index("cursos");
+        $clientes = ModeloClientes::index("clientes");
 
-        $json=array(
-            "detalle"=>$cursos
-          );
-    
-          echo json_encode($json,true);
-          return;
+        // validar credenciales del cliente
+        if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])){
+
+            foreach($clientes as $key => $values){
+                if(base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($values["id_cliente"]. ":" .$values["llave_secreta"])){
+                    $cursos = ModeloCursos::index("cursos");
+
+                    $json=array(
+                        "stattus"=>200,
+                        "total_registros"=>count($cursos),
+                        "detalle"=>$cursos
+                    );
+                
+                    echo json_encode($json,true);
+                    return;
+                }
+            }     
+        }  
     }
 
     public function crear(){

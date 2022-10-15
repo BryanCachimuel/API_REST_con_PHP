@@ -77,7 +77,9 @@ class ControladorClientes{
         if($crear == "ok"){
             $json=array(
                 "status"=>200,
-                "detalle"=> "Registro del cliente exitoso"
+                "detalle"=> "Registro del cliente exitoso",
+                "id_cliente" => $id_cliente,
+                "llave_secreta" => $llave_secreta
             );
             echo json_encode($json,true);
             return;
