@@ -54,7 +54,14 @@ class ControladorClientes{
             echo json_encode($json,true);
             return;
             }
-        }   
+        }
+        
+        // generar credenciales del cliente
+        $id_cliente = str_replace("$","J",crypt($datos["nombre"].$datos["apellido"].$datos["email"], '$2a$07$afartwetsdAD52356FEDGsfhsd$'));
+        //echo "<pre>"; print_r($id_cliente);echo "</pre>";
+
+        $llave_secreta = str_replace("$","M",crypt($datos["email"].$datos["apellido"].$datos["nombre"], '$2a$07$afartwetsdAD52356FEDGsfhsd$'));
+        //echo "<pre>"; print_r($llave_secreta);echo "</pre>";
     }
 }
 
