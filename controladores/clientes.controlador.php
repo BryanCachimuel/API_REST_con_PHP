@@ -41,7 +41,20 @@ class ControladorClientes{
           return;
         }
 
-       
+        // validar que un email no se repita
+        $clientes = ModeloClientes::index("clientes");
+
+        foreach($clientes as $key =>$value){
+            if($value["email"] == $datos["email"]){
+             
+                $json=array(
+                    "status"=>200,
+                    "detalle"=> "el email esta repetido"
+                );
+            echo json_encode($json,true);
+            return;
+            }
+        }   
     }
 }
 
