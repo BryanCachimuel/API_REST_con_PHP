@@ -83,10 +83,22 @@ class ControladorCursos{
                                    "create_at"=>date('Y-m-d h:i:s'),
                                    "update_at"=>date('Y-m-d h:i:s')
                                 );
-                    $create = ModeloCursos::crear("cursos",$datos);           
+                    $create = ModeloCursos::crear("cursos",$datos);  
+                    
+                    // verificando la respuesta del modelo
+                    if($create == "ok"){
+				    	$json = array(
+			        	    "status"=>200,
+				    		"detalle"=>"Registro exitoso, su curso ha sido guardado"
+
+				    	); 
+				    	echo json_encode($json, true); 
+				    	return;    	
+			   	 	}
                 }
             }
         }
+        
 
         $json=array(
             "detalle"=>"estas en la vista de crear"
