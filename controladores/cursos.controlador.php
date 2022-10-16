@@ -67,8 +67,7 @@ class ControladorCursos{
                             $json = array(
 								"status"=>404,
 								"detalle"=>"La descripción ya existe en la base de datos"
-
-							)
+							);
 							echo json_encode($json, true);	
 							return;	
 						}
@@ -86,26 +85,23 @@ class ControladorCursos{
                     $create = ModeloCursos::crear("cursos",$datos);  
                     
                     // verificando la respuesta del modelo
-                    if($create == "ok"){
+                    if($crear == "ok"){
 				    	$json = array(
 			        	    "status"=>200,
 				    		"detalle"=>"Registro exitoso, su curso ha sido guardado"
-
 				    	); 
 				    	echo json_encode($json, true); 
 				    	return;    	
-			   	 	}
+			   	 	}     
                 }
             }
         }
-        
+             $json=array(
+                "detalle"=>"estas en la vista create"
+            );
 
-        $json=array(
-            "detalle"=>"estas en la vista de crear"
-          );
-    
-          echo json_encode($json,true);
-          return;
+            echo json_encode($json,true);
+            return;
     }
 
     public function ver($id){
