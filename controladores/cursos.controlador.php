@@ -27,82 +27,84 @@ class ControladorCursos{
     }
 
     public function crear($datos){
+       // validar credenciales del cliente
+    $clientes = ModeloClientes::index("clientes");
 
-        // validar credenciales del cliente
-        $clientes = ModeloClientes::index("clientes");
-        if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])){{
-            foreach($clientes as $key =>$valueCliente){
-                if("Basic ".base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == "Basic ".base64_encode($valueCliente["id_cliente"].":".$valueCliente["llave_secreta"])){
-                    
-                    // validar datos que van a ingresar para crear un curso
-                    foreach($datos as $key => $valueDatos){
-                     
-                        if(isset($valueDatos) && !preg_match('/^[(\\)\\=\\&\\$\\;\\-\\_\\*\\"\\<\\>\\?\\¿\\!\\¡\\:\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $valueDatos)){
+    if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])){
 
-                            $json = array(
-                                "status"=>404,
-                                "detalle"=>"Error en el campo ".$key
-                            );
+      foreach ($clientes as $key => $valueCliente) {
 
-                            echo json_encode($json, true);
-                            return;
-                        }
-                    }
-                    // validar que el título o la descripción no esten repetidos
-                    $cursos = ModeloCursos::index("cursos");
-                    foreach($cursos as $key => $value){
+        if(base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($valueCliente["id_cliente"] .":". $valueCliente["llave_secreta"])){
+        // validar datos que van a ingresar para crear un curso
+          foreach ($datos as $key => $valueDatos) {
+            if(isset($valueDatos) && !preg_match('/^[(\\)\\=\\&\\$\\;\\-\\_\\*\\"\\<\\>\\?\\¿\\!\\¡\\:\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $valueDatos)){
+				
+                $json = array(
+					"status"=>404,
+					"detalle"=>"Error en el campo ".$key
+				);
+				echo json_encode($json, true);
+				return;
+			}
 
-                        if($value->titulo == $datos["titulo"]){
+          }
+  	
+		//Validar que el titulo o la descripcion no estén repetidos		
+        $cursos = ModeloCursos::index("cursos");
 
-							$json = array(
-								"status"=>404,
-								"detalle"=>"El título ya existe en la base de datos"
+          foreach ($cursos as $key => $value) {
+            if($value->titulo == $datos["titulo"]){
+				$json = array(
+                    "status"=>404,
+				    "detalle"=>"El título ya existe en la base de datos"
+                );
+                echo json_encode($json, true);	
+				return;
 
-							);
-							echo json_encode($json, true);	
-							return;
-						}
-                        if($value->descripcion == $datos["descripcion"]){
-							
-                            $json = array(
-								"status"=>404,
-								"detalle"=>"La descripción ya existe en la base de datos"
-							);
-							echo json_encode($json, true);	
-							return;	
-						}
-                    }
-                    // llevar los datos que se van a ingresar al modelo
-                    $datos = array("titulo"=>$datos["titulo"],
-                                   "descripcion"=>$datos["descripcion"],
-                                   "instructor"=>$datos["instructor"],
-                                   "imagen"=>$datos["imagen"],
-                                   "precio"=>$datos["precio"],
-                                   "id_creador"=>$valueCliente["id"],
-                                   "create_at"=>date('Y-m-d h:i:s'),
-                                   "update_at"=>date('Y-m-d h:i:s')
-                                );
-                    $create = ModeloCursos::crear("cursos",$datos);  
-                    
-                    // verificando la respuesta del modelo
-                    if($crear == "ok"){
-				    	$json = array(
-			        	    "status"=>200,
-				    		"detalle"=>"Registro exitoso, su curso ha sido guardado"
-				    	); 
-				    	echo json_encode($json, true); 
-				    	return;    	
-			   	 	}     
-                }
-            }
-        }
-             $json=array(
-                "detalle"=>"estas en la vista create"
+				}
+            if($value->descripcion == $datos["descripcion"]){
+                $json = array(
+					"status"=>404,
+					"detalle"=>"La descripción ya existe en la base de datos"
+				);
+                echo json_encode($json, true);	
+				return;				
+			}
+        }	
+		//Llevar datos al modelo		
+          $datos = array( "titulo"=>$datos["titulo"],
+                          "descripcion"=>$datos["descripcion"],
+                          "instructor"=>$datos["instructor"],
+                          "imagen"=>$datos["imagen"],
+                          "precio"=>$datos["precio"],
+                          "id_creador"=>$valueCliente["id"],
+                          "create_at"=>date('Y-m-d h:i:s'),
+                          "update_at"=>date('Y-m-d h:i:s'));
+
+        $create = ModeloCursos::crear("cursos", $datos);
+
+	    //Respuesta del modelo
+			if($create == "ok"){
+			    $json = array(
+			        "status"=>200,
+				    "detalle"=>"Registro exitoso, su curso ha sido guardado"
+				); 
+				echo json_encode($json, true); 
+				return;    	
+
+		 }
+
+       }
+
+      }
+    }
+            $json=array(
+             "detalle"=>"estas en la vista create"
             );
-
             echo json_encode($json,true);
             return;
     }
+
 
     public function ver($id){
         $json=array(
