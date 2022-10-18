@@ -116,11 +116,24 @@ class ControladorCursos{
                 // mostrar todos los cursos
                 $curso = ModeloCursos::ver("cursos", $id);
 
-
+                if(!empty($curso)){
+                    $json=array(
+                        "status"=>200,
+                        "detalle"=> $curso);
+                    echo json_encode($json,true);
+                    return;
+                }else{
+                    $json=array(
+                        "status"=>200,
+                        "total_registros"=>0,
+                        "detalle"=> "No hay ningún curso registrado"
+                    );
+                    echo json_encode($json,true);
+                    return; 
+                }     
            }
          }
        }
-
     }
 
     public function actualizar($id){
