@@ -136,13 +136,43 @@ class ControladorCursos{
        }
     }
 
-    public function actualizar($id){
-        $json=array(
-            "detalle"=>"curso actualizado correctamente con el id: ".$id
-          );
-    
-          echo json_encode($json,true);
-          return;
+    public function actualizar($datos, $id){
+       // validar credenciales del cliente
+       $clientes = ModeloClientes::index("clientes");
+
+       if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])){
+         foreach ($clientes as $key => $valueCliente){
+            if(base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($valueCliente["id_cliente"] .":". $valueCliente["llave_secreta"])){
+                // validar datos
+                foreach ($datos as $key => $valueDatos) {
+                    if(isset($valueDatos) && !preg_match('/^[(\\)\\=\\&\\$\\;\\-\\_\\*\\"\\<\\>\\?\\¿\\!\\¡\\:\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $valueDatos)){
+                        $json = array(
+                            "status"=>404,
+                            "detalle"=>"Error en el campo ".$key
+                        );
+                        echo json_encode($json, true);
+                        return;
+                    }
+                }
+                // validar id del creador del curso
+                $curso = ModeloCursos::ver("cursos", $id);
+                foreach($curso as $key => $valueCurso){
+                    if($valueCurso->id_creador == $valueCliente["id"]){
+                        // llevar datos al modelo
+                        $datos = array("id"=>$id,
+									   "titulo"=>$datos["titulo"],
+									   "descripcion"=>$datos["descripcion"],
+									   "instructor"=>$datos["instructor"],
+									   "imagen"=>$datos["imagen"],
+									   "precio"=>$datos["precio"],
+									   "update_at"=>date('Y-m-d h:i:s')
+                                    );
+                    $actualizar = ModeloCursos::actualizar("cursos", $datos);
+                    }
+                }
+            }
+         }
+       }
     }
 
     public function eliminar($id){
