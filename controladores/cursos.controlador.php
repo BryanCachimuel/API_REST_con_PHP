@@ -203,8 +203,8 @@ class ControladorCursos{
                     foreach($curso as $key => $valueCurso){
                         if($valueCurso->id_creador == $valueCliente["id"]){
                             // llevar los datos de un curso hacia el modelo
-                            $eliminacion = ModeloCuros::eliminar("cursos", $id);
-                            if($delete== "ok"){
+                            $eliminacion = ModeloCursos::eliminar("cursos", $id);
+                            if($eliminacion == "ok"){
                                 $json = array(
                                     "status"=>200,
                                     "detalle"=>"se ha borrado el curso"                                   

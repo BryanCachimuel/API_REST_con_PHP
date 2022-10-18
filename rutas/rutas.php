@@ -92,7 +92,7 @@ if(count(array_filter($arrayRutas)) == 1){
       Peticion DELETE
     ========================================*/
     if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "DELETE"){
-      $eliminarcursos = new ControladorCursos;
+      $eliminarcursos = new ControladorCursos();
       $eliminarcursos->eliminar(array_filter($arrayRutas)[3]);
     }
   }
