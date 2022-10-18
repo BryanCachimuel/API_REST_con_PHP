@@ -32,6 +32,15 @@ class ModeloCursos{
 		$stmt-> close();
 		$stmt = null;
     }
+
+	static public function ver($tabla, $id){
+		$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE id=:id");
+		$stmt -> bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_CLASS);
+        $stmt->close();
+        $stmt = null;
+	}
 }
 
 ?>
