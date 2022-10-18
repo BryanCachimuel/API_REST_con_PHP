@@ -107,12 +107,20 @@ class ControladorCursos{
 
 
     public function ver($id){
-        $json=array(
-            "detalle"=>"este es el curso con el id: ".$id
-          );
-    
-          echo json_encode($json,true);
-          return;
+       // validar credenciales del cliente
+       $clientes = ModeloClientes::index("clientes");
+
+       if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])){
+        foreach ($clientes as $key => $valueCliente){
+            if(base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($valueCliente["id_cliente"] .":". $valueCliente["llave_secreta"])){
+                // mostrar todos los cursos
+                $curso = ModeloCursos::ver("cursos", $id);
+
+
+           }
+         }
+       }
+
     }
 
     public function actualizar($id){
