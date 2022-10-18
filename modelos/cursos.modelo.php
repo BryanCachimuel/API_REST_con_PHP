@@ -41,6 +41,26 @@ class ModeloCursos{
         $stmt->close();
         $stmt = null;
 	}
+
+	static public function actualizar($tabla, $datos){
+		$stmt=Conexion::conectar()->prepare("UPDATE cursos SET titulo=:titulo,descripcion=:descripcion,instructor=:instructor,imagen=:imagen,precio=:precio,update_at=:update_at WHERE id=:id");
+		
+		$stmt -> bindParam(":id", $datos["id"], PDO::PARAM_STR);
+        $stmt -> bindParam(":titulo", $datos["titulo"], PDO::PARAM_STR);
+		$stmt -> bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
+		$stmt -> bindParam(":instructor", $datos["instructor"], PDO::PARAM_STR);
+		$stmt -> bindParam(":imagen", $datos["imagen"], PDO::PARAM_STR);
+		$stmt -> bindParam(":precio", $datos["precio"], PDO::PARAM_STR);
+		$stmt -> bindParam(":update_at", $datos["update_at"], PDO::PARAM_STR);
+
+		if($stmt -> execute()){
+			return "ok";
+		}else{
+			print_r(Conexion::conectar()->errorInfo());
+		}
+		$stmt-> close();
+		$stmt = null;
+	} 
 }
 
 ?>
