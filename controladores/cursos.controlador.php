@@ -168,7 +168,23 @@ class ControladorCursos{
 									   "update_at"=>date('Y-m-d h:i:s')
                                     );
                     $actualizar = ModeloCursos::actualizar("cursos", $datos);
+                    
+                    if($actualizar == "ok"){
+                        $json = array(
+                            "status"=>200,
+                             "detalle"=>"Registro exitoso, su curso ha sido actualizado"
+                        ); 
+                        echo json_encode($json, true); 
+                        return;  
+                    }else{
+                        $json = array(
+                            "status"=>404,
+                            "detalle"=>"No está autorizado para modificar este curso"                   
+                          );
+                        echo json_encode($json, true);
+                        return;
                     }
+                  }
                 }
             }
          }
