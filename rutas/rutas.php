@@ -73,14 +73,19 @@ if(count(array_filter($arrayRutas)) == 1){
     
     //Peticion GET
     if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "GET"){
-      $cursos = new ControladorCursos;
+      $cursos = new ControladorCursos();
       $cursos->ver(array_filter($arrayRutas)[3]);
     }
 
     //Peticion PUT
     if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "PUT"){
-      $editarcursos = new ControladorCursos;
-      $editarcursos->actualizar(array_filter($arrayRutas)[3]);
+      // capturando datos de un curso
+      $datos = array();
+      parse_str(file_get_contents('php://input'), $datos);
+      /*echo "<pre>"; print_r($datos);echo "</pre>";
+      return;*/
+      $editarcursos = new ControladorCursos();
+      $editarcursos->actualizar(array_filter($arrayRutas)[3], $datos);
     }
 
     /*=======================================
