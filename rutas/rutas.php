@@ -3,11 +3,13 @@
 // mapea la url
 $arrayRutas=explode("/",$_SERVER['REQUEST_URI']);
 //echo "<pre>"; print_r($arrayRutas);echo "</pre>";
-
-/*
-  cuando no se hace una petición a la api sale este mensaje
-*/
-if(count(array_filter($arrayRutas)) == 1){
+if(isset($_GET["pagina"]) && is_numeric($_GET["pagina"])){
+  $cursos = new ControladorCursos();
+  $cursos->index($_GET["pagina"]); 
+}else{
+  
+  //cuando no se hace una petición a la api sale este mensaje
+ if(count(array_filter($arrayRutas)) == 1){
   $json=array(
     "detalle"=>"no encontrado"
   );
@@ -15,7 +17,7 @@ if(count(array_filter($arrayRutas)) == 1){
   echo json_encode($json,true);
   return;
 
-}else{
+ }else{
   /*
     cuando se hace una petición a la api sale este mensaje siempre y cuando se ponga como parametro 2 en la url cursos (http://localhost/api-rest/cursos/)
   */
@@ -27,7 +29,7 @@ if(count(array_filter($arrayRutas)) == 1){
       if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "GET"){
 
         /* manda a llamar a la clase ControladorCursos que se encuentra en el archivo cursos.controlador.php */
-        $cursos = new ControladorCursos;
+        $cursos = new ControladorCursos();
         $cursos->index();
       }
 
@@ -46,6 +48,10 @@ if(count(array_filter($arrayRutas)) == 1){
         $cursos = new ControladorCursos();
         $cursos->crear($datos);
       }
+      else if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "GET" ){
+        $cursos=new ControladorCursos();
+        $cursos->index(null);
+
     }
 
 
@@ -95,9 +101,9 @@ if(count(array_filter($arrayRutas)) == 1){
       $eliminarcursos = new ControladorCursos();
       $eliminarcursos->eliminar(array_filter($arrayRutas)[3]);
     }
+   }
   }
-
  }
 }
-
+}
 ?>

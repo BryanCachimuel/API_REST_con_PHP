@@ -2,7 +2,7 @@
 
 class ControladorCursos{
 
-    public function index(){
+    public function index($pagina){
 
         $clientes = ModeloClientes::index("clientes");
 
@@ -11,7 +11,14 @@ class ControladorCursos{
 
             foreach($clientes as $key => $values){
                 if(base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($values["id_cliente"]. ":" .$values["llave_secreta"])){
-                    $cursos = ModeloCursos::index("cursos","clientes");
+                    
+                    if($pagina != null){
+                        $cantidad = 10;
+                        $desde = ($pagina-1)*$cantidad;
+                        $cursos = ModeloCursos::index("cursos","clientes", $cantidad, $desde);
+                    }else{
+                        $cursos = ModeloCursos::index("cursos","clientes", null, null);
+                    }      
 
                     $json=array(
                         "status"=>200,
@@ -50,7 +57,7 @@ class ControladorCursos{
           }
   	
 		//Validar que el titulo o la descripcion no estén repetidos		
-        $cursos = ModeloCursos::index("cursos","clientes");
+        $cursos = ModeloCursos::index("cursos","clientes",null, null);
 
           foreach ($cursos as $key => $value) {
             if($value->titulo == $datos["titulo"]){
