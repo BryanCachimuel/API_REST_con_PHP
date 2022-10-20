@@ -11,7 +11,7 @@ class ControladorCursos{
 
             foreach($clientes as $key => $values){
                 if(base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($values["id_cliente"]. ":" .$values["llave_secreta"])){
-                    $cursos = ModeloCursos::index("cursos");
+                    $cursos = ModeloCursos::index("cursos","clientes");
 
                     $json=array(
                         "status"=>200,
@@ -50,7 +50,7 @@ class ControladorCursos{
           }
   	
 		//Validar que el titulo o la descripcion no estén repetidos		
-        $cursos = ModeloCursos::index("cursos");
+        $cursos = ModeloCursos::index("cursos","clientes");
 
           foreach ($cursos as $key => $value) {
             if($value->titulo == $datos["titulo"]){
@@ -91,11 +91,8 @@ class ControladorCursos{
 				); 
 				echo json_encode($json, true); 
 				return;    	
-
 		 }
-
        }
-
       }
     }
             $json=array(
@@ -114,7 +111,7 @@ class ControladorCursos{
         foreach ($clientes as $key => $valueCliente){
             if(base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($valueCliente["id_cliente"] .":". $valueCliente["llave_secreta"])){
                 // mostrar todos los cursos
-                $curso = ModeloCursos::ver("cursos", $id);
+                $curso = ModeloCursos::ver("cursos", "clientes", $id);
 
                 if(!empty($curso)){
                     $json=array(
@@ -155,7 +152,7 @@ class ControladorCursos{
                     }
                 }
                 // validar id del creador del curso
-                $curso = ModeloCursos::ver("cursos", $id);
+                $curso = ModeloCursos::ver("cursos", "clientes", $id);
                 foreach($curso as $key => $valueCurso){
                     if($valueCurso->id_creador == $valueCliente["id"]){
                         // llevar datos al modelo
@@ -199,7 +196,7 @@ class ControladorCursos{
             foreach ($clientes as $key => $valueCliente){
                 if(base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($valueCliente["id_cliente"] .":". $valueCliente["llave_secreta"])){
                     // validar id del creador
-                    $curso = ModeloCursos::ver("cursos", $id);
+                    $curso = ModeloCursos::ver("cursos", "clientes" ,$id);
                     foreach($curso as $key => $valueCurso){
                         if($valueCurso->id_creador == $valueCliente["id"]){
                             // llevar los datos de un curso hacia el modelo

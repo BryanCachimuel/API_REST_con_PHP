@@ -4,8 +4,10 @@ require_once "conexion.php";
 
 class ModeloCursos{
 
-    static public function index($tabla){   
-        $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");
+    static public function index($tabla1, $tabla2){   
+        $stmt = Conexion::conectar()->prepare("SELECT $tabla1.id, $tabla1.titulo, $tabla1.descripcion, $tabla1.instructor, 
+											  $tabla1.imagen, $tabla1.precio, $tabla1.id_creador, $tabla2.nombre, $tabla2.apellido FROM $tabla1 INNER JOIN $tabla2
+											  ON $tabla1.id_creador = $tabla2.id");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
         $stmt->close();
@@ -33,8 +35,10 @@ class ModeloCursos{
 		$stmt = null;
     }
 
-	static public function ver($tabla, $id){
-		$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE id=:id");
+	static public function ver($tabla1, $tabla2, $id){
+		$stmt = Conexion::conectar()->prepare("SELECT $tabla1.id, $tabla1.titulo, $tabla1.descripcion, $tabla1.instructor, 
+											   $tabla1.imagen, $tabla1.precio, $tabla1.id_creador, $tabla2.nombre, $tabla2.apellido FROM $tabla1 INNER JOIN $tabla2
+											   ON $tabla1.id_creador = $tabla2.id WHERE $tabla1.id=:id");
 		$stmt -> bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
